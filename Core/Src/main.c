@@ -43,7 +43,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+volatile uint32_t lastTick, totalInetrval;
+volatile uint32_t pressPeriod = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -138,7 +139,27 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+//Two Limit Switch Handler
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 
+	static uint32_t pinTick0 = 0, pinTick1 = 0;
+
+	if (GPIO_Pin == GPIO_PIN_0) {
+
+		// Debouncing  10 ms
+		if (HAL_GetTick() - pinTick0 > 10) {
+
+		}
+		pinTick0 = HAL_GetTick();
+
+	} else if (GPIO_Pin == GPIO_PIN_1) {
+		// Debouncing  10 ms
+		if (HAL_GetTick() - pinTick1 > 10) {
+
+		}
+		pinTick1 = HAL_GetTick();
+	}
+}
 /* USER CODE END 4 */
 
 /**
