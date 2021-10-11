@@ -96,7 +96,7 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-		if (HAL_GetTick() - lastTick > (totalInetrval)) {
+		if (HAL_GetTick() - lastTick > (totalInetrval/2)) {
 			HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_9);
 			HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_8);
 			lastTick = HAL_GetTick();
