@@ -87,7 +87,8 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
-
+  lastTick = HAL_GetTick(); //Homing Debounce Implementation
+  totalInetrval = 1000; //Initial time Interval
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -95,7 +96,11 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
+		if (HAL_GetTick() - lastTick > (totalInetrval)) {
+			HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_9);
+			HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_8);
+			lastTick = HAL_GetTick();
+	  	}
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -148,14 +153,20 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 
 		// Debouncing  10 ms
 		if (HAL_GetTick() - pinTick0 > 10) {
-
+			totalInetrval *= 2;
+			if (totalInetrval > 1000) {
+				totalInetrval = 1000;
+			}
 		}
 		pinTick0 = HAL_GetTick();
 
 	} else if (GPIO_Pin == GPIO_PIN_1) {
 		// Debouncing  10 ms
 		if (HAL_GetTick() - pinTick1 > 10) {
-
+			totalInetrval /= 2;
+			if (totalInetrval < 25) {
+				 totalInetrval = 25;
+			}
 		}
 		pinTick1 = HAL_GetTick();
 	}
